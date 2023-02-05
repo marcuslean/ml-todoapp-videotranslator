@@ -1,0 +1,19 @@
+<div>
+    <h1>{{signupMode ? "Sign Up" : "Log In"}}</h1>
+    <form (ngSubmit)="signupMode ? signUp() : login()">
+        <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput email required type="email" name="email" [(ngModel)]="userInput.email">
+        </mat-form-field><br>
+        <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput required type="password" name="password" [(ngModel)]="userInput.password">
+        </mat-form-field><br>
+        <button mat-stroked-button color="primary" type="submit">{{signupMode ? "Sign Up" : "Log In"}}</button>
+    </form>
+    <span>{{errorMsg}}</span>
+    <div>
+        <span>{{signupMode ? "Already a user?" : "Not a user yet?"}}</span><br>
+        <button (click)="signupMode = !signupMode">{{signupMode ? "Log In" : "Sign Up"}}</button>
+    </div>
+</div>

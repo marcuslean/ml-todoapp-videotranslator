@@ -1,15 +1,19 @@
 <div class="form">
     <br>
+    <!-- input form for user to add new task -->
     <form class="form-field" (ngSubmit)="addTodo()">
-        <mat-form-field>
+        <mat-form-field appearance="outline">
             <mat-label>New Task</mat-label>
             <input matInput placeholder="Ex. Apply at VideoTranslator" name="userInput" [(ngModel)]="newTodo">
         </mat-form-field>
     </form>
 </div>
 
+<!-- list containing all tasks -->
 <mat-list class="list">
     <h1>Things to do:</h1>
+    <!-- each div containing task is clickable -->
+    <span *ngIf="todos.length <= 0">Please add a new task</span>
     <div *ngFor="let item of todos;" (click)="translate(item.task)">
         <mat-list-item style="cursor: pointer;">{{item.task}}</mat-list-item>
         <mat-divider />

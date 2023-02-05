@@ -1,2 +1,5 @@
-<app-nav-bar />
-<app-todo-list />
+<body>
+    <app-nav-bar />
+    <app-user *ngIf="!loggedIn" />
+    <app-todo-list *ngIf="loggedIn" />
+</body>
