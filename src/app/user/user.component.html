@@ -9,11 +9,12 @@
             <mat-label>Password</mat-label>
             <input matInput required type="password" name="password" [(ngModel)]="userInput.password">
         </mat-form-field><br>
-        <button mat-stroked-button color="primary" type="submit">{{signupMode ? "Sign Up" : "Log In"}}</button>
+        <button mat-flat-button color="primary" type="submit">{{signupMode ? "Sign Up" : "Log In"}}</button>
     </form>
     <span>{{errorMsg}}</span>
     <div>
         <span>{{signupMode ? "Already a user?" : "Not a user yet?"}}</span><br>
-        <button (click)="signupMode = !signupMode">{{signupMode ? "Log In" : "Sign Up"}}</button>
+        <button mat-flat-button color="primary" (click)="signupMode = !signupMode">{{signupMode ? "Log In" : "Sign
+            Up"}}</button>
     </div>
 </div>

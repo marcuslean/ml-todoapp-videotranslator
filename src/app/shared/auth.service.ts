@@ -12,8 +12,9 @@ export class AuthService {
 
   constructor() { }
 
-  signUp() {
-
+  signUp(email: string, password: string) {
+    this.allowedUsers.push({ email: email, password: password })
+    this.loggedIn.next(true)
   }
 
   login(email: string, password: string): boolean {
@@ -22,5 +23,9 @@ export class AuthService {
       return true;
     }
     return false;
+  }
+
+  logout() {
+    this.loggedIn.next(false)
   }
 }

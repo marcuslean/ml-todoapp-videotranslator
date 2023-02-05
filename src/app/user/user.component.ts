@@ -14,16 +14,18 @@ export class UserComponent {
   constructor(private authService: AuthService) { }
 
   signUp() {
+    if (!this.userInput.email || !this.userInput.password) { return; }
 
+    this.authService.signUp(this.userInput.email, this.userInput.password)
   }
 
   login() {
     if (!this.userInput.email || !this.userInput.password) { return; }
+
     if (!this.authService.login(this.userInput.email, this.userInput.password)) {
       this.errorMsg = "Error"
     } else {
       this.errorMsg = ""
     }
   }
-
 }

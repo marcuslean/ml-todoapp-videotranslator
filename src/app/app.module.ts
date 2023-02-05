@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { UserComponent } from './user/user.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { UserComponent } from './user/user.component';
     FormsModule,
     MatDividerModule,
     MatListModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
