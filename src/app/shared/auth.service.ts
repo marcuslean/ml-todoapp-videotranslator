@@ -2,19 +2,20 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, setPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, browserSessionPersistence, onAuthStateChanged } from "firebase/auth";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   auth
-  loggedIn = new BehaviorSubject<boolean>(false)
-  // allowedUsers = [
-  //   { email: "example@place.com", password: "password" }
-  // ]
+  private _loggedIn = new BehaviorSubject<boolean>(false)
+  loggedIn = this._loggedIn.asObservable()
+  private _errorMsg = new BehaviorSubject<string>("")
+  errorMsg = this._errorMsg.asObservable()
 
   constructor() {
+    // initialise firebase app
     const firebaseConfig = {
       apiKey: "AIzaSyDTv5CdI_1XSowArmmXAL4EuQBs_ixS5Q0",
       authDomain: "todo-app-730dc.firebaseapp.com",
@@ -25,51 +26,44 @@ export class AuthService {
       measurementId: "G-W6Q73M4FSP"
     }
     const app = initializeApp(firebaseConfig)
+
     this.auth = getAuth(app)
+    setPersistence(this.auth, browserSessionPersistence) // allow users to stay logged in until the session has ended (e.g. tab closed)
+    onAuthStateChanged(this.auth, (user) => { // check if there is an existing session with logged in user
+      if (user) {
+        this._loggedIn.next(true)
+      }
+    })
   }
 
-  ngInit() {
-    // check session for valid token
-    // then log user back in
-  }
-
-  signUp(email: string, password: string): string {
-    // this.allowedUsers.push({ email: email, password: password })
+  signUp(email: string, password: string) {
     createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-        // Signed in 
+        // signed in
         const user = userCredential.user
-        this.loggedIn.next(true)
-        return "Success"
+        this._loggedIn.next(true)
       })
       .catch((error) => {
-        const errorCode = error.code
-        const errorMessage = error.message
-        return errorMessage
-      });
-    return "Failed"
+        // error occured
+        this._errorMsg.next(error.message)
+      })
   }
 
-  login(email: string, password: string): boolean {
-    // if (this.allowedUsers.find(user => user.email === email && user.password === password)) {
-    //   this.loggedIn.next(true)
-    //   return true;
-    // }
+  login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-        // Signed in 
+        // signed in
         const user = userCredential.user
-        this.loggedIn.next(true)
-        return true
+        this._loggedIn.next(true)
       })
       .catch((error) => {
-        const errorCode = error.code
-        const errorMessage = error.message
+        // error occured
+        this._errorMsg.next(error.message)
       })
-    return false
   }
 
   logout() {
-    this.loggedIn.next(false)
+    sessionStorage.clear()
+    this._loggedIn.next(false)
   }
 }

@@ -14,7 +14,7 @@
     <span>{{errorMsg}}</span>
     <div>
         <span>{{signupMode ? "Already a user?" : "Not a user yet?"}}</span><br>
-        <button mat-flat-button color="primary" (click)="signupMode = !signupMode">
+        <button mat-flat-button color="primary" (click)="changeMode()">
             {{signupMode ? "Log In" : "Sign Up"}}
         </button>
     </div>
