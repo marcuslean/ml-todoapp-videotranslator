@@ -20,12 +20,3 @@
     user-select: none;
     /* Standard */
 }
-
-.list>div {
-    background: none;
-    transition: 0.1s;
-}
-
-.list>div:hover {
-    background: rgb(199, 199, 199);
-}

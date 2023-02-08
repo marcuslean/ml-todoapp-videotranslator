@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Todo } from '../models/todo.model';
 
-import { getDatabase, ref, onValue, set } from "firebase/database";
+import { getDatabase, ref, onValue, set, update, remove } from "firebase/database";
 import { initializeApp } from 'firebase/app';
 import { AuthService } from './auth.service';
 import { BehaviorSubject } from 'rxjs';
-import { v4 as uuid } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
   db
-  todos = new BehaviorSubject<Todo[]>([]) // list of all tasks
+  private _todos = new BehaviorSubject<Todo[]>([]) // list of all tasks
+  todos = this._todos.asObservable()
 
   constructor(private authService: AuthService) {
     // initialise firebase app
@@ -29,12 +29,35 @@ export class TodoService {
     const app = initializeApp(firebaseConfig)
     this.db = getDatabase(app)
     const tasksRef = ref(this.db, "tasks/")
-    onValue(tasksRef, (snapshot) => {
-      this.todos.next(snapshot.val())
+    onValue(tasksRef, (snapshot) => { // subscribes to any changes to the /tasks endpoint
+      this._todos.next(snapshot.val())
     })
   }
 
-  addTask(newTask: Todo) {
-    set(ref(this.db, "tasks/" + uuid()), newTask)
+  // function for adding new tasks
+  addTask(newTask: object, id: string) {
+    try {
+      set(ref(this.db, "tasks/" + id), newTask)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  // function for updating tasks
+  updateTask(id: string, field: string, value: string | boolean) {
+    try {
+      update(ref(this.db, "/tasks/" + id + "/"), { [field]: value })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  // function for deletting tasks
+  deleteTask(id: string) {
+    try {
+      remove(ref(this.db, "tasks/" + id))
+    } catch (err) {
+      console.error(err)
+    }
   }
 }

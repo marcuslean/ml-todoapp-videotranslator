@@ -25,3 +25,9 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## TODO
+
+Current todo list is organised by alphabetical order based on id
+   Meaning newest todo might not be at the top/bottom
+Storing key data within the application (e.g. api key is exposed)
