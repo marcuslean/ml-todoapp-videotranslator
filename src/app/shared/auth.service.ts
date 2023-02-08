@@ -9,7 +9,7 @@ import { getAuth, setPersistence, createUserWithEmailAndPassword, signInWithEmai
 })
 export class AuthService {
   auth
-  private _loggedIn = new BehaviorSubject<boolean>(false)
+  private _loggedIn = new BehaviorSubject<string | null>(null)
   loggedIn = this._loggedIn.asObservable()
   private _errorMsg = new BehaviorSubject<string>("")
   errorMsg = this._errorMsg.asObservable()
@@ -23,7 +23,8 @@ export class AuthService {
       storageBucket: "todo-app-730dc.appspot.com",
       messagingSenderId: "501154263412",
       appId: "1:501154263412:web:ab4ab8cc551c41b2e03c21",
-      measurementId: "G-W6Q73M4FSP"
+      measurementId: "G-W6Q73M4FSP",
+      databaseURL: "https://todo-app-730dc-default-rtdb.firebaseio.com/"
     }
     const app = initializeApp(firebaseConfig)
 
@@ -31,7 +32,7 @@ export class AuthService {
     setPersistence(this.auth, browserSessionPersistence) // allow users to stay logged in until the session has ended (e.g. tab closed)
     onAuthStateChanged(this.auth, (user) => { // check if there is an existing session with logged in user
       if (user) {
-        this._loggedIn.next(true)
+        this._loggedIn.next(user.email)
       }
     })
   }
@@ -41,7 +42,7 @@ export class AuthService {
       .then((userCredential) => {
         // signed in
         const user = userCredential.user
-        this._loggedIn.next(true)
+        this._loggedIn.next(user.email)
       })
       .catch((error) => {
         // error occured
@@ -54,7 +55,7 @@ export class AuthService {
       .then((userCredential) => {
         // signed in
         const user = userCredential.user
-        this._loggedIn.next(true)
+        this._loggedIn.next(user.email)
       })
       .catch((error) => {
         // error occured
@@ -64,6 +65,6 @@ export class AuthService {
 
   logout() {
     sessionStorage.clear()
-    this._loggedIn.next(false)
+    this._loggedIn.next(null)
   }
 }
