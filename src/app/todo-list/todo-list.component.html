@@ -15,6 +15,7 @@
     <mat-divider />
     <!-- Hint telling user that the list is empty -->
     <span *ngIf="todos.length <= 0"><br>Please add a new task</span>
+    <!-- Only displays when something is selected -->
     <div *ngIf="todos.length > 0 && checkList.selectedOptions.selected.length > 0">
         <button mat-button color="primary"
             (click)="updateTask(checkList.selectedOptions.selected[0].value)">Complete</button>
@@ -27,7 +28,8 @@
     <!-- allows for future expansion for multiple selections -->
     <mat-selection-list #checkList [multiple]="false">
         <mat-list-option *ngFor="let item of todos" [value]="item">
-            {{item.task}}
+            <s> {{ item.completed ? item.task : "" }} </s>
+            {{ item.completed ? "" : item.task }}
         </mat-list-option>
     </mat-selection-list>
 </mat-list>

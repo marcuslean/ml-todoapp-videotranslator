@@ -3,12 +3,14 @@ import { BehaviorSubject } from 'rxjs';
 
 import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, browserSessionPersistence, onAuthStateChanged } from "firebase/auth";
+import { getDatabase, ref, set } from 'firebase/database';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   auth
+  db
   private _loggedIn = new BehaviorSubject<string | null>(null)
   loggedIn = this._loggedIn.asObservable()
   private _errorMsg = new BehaviorSubject<string>("")
@@ -27,8 +29,8 @@ export class AuthService {
       databaseURL: "https://todo-app-730dc-default-rtdb.firebaseio.com/"
     }
     const app = initializeApp(firebaseConfig)
-
     this.auth = getAuth(app)
+    this.db = getDatabase(app)
     setPersistence(this.auth, browserSessionPersistence) // allow users to stay logged in until the session has ended (e.g. tab closed)
     onAuthStateChanged(this.auth, (user) => { // check if there is an existing session with logged in user
       if (user) {
@@ -37,11 +39,12 @@ export class AuthService {
     })
   }
 
-  signUp(email: string, password: string) {
+  signUp(email: string, password: string, admin: boolean) {
     createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         // signed in
         const user = userCredential.user
+        set(ref(this.db, "/users/" + user.uid), { email: user.email, admin: admin, history: 0 })
         this._loggedIn.next(user.email)
       })
       .catch((error) => {

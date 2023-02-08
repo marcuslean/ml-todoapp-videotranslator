@@ -37,7 +37,7 @@ export class TodoService {
   // function for adding new tasks
   addTask(newTask: object, id: string) {
     try {
-      set(ref(this.db, "tasks/" + id), newTask)
+      set(ref(this.db, "/tasks/" + id), newTask)
     } catch (err) {
       console.error(err)
     }
@@ -55,7 +55,7 @@ export class TodoService {
   // function for deletting tasks
   deleteTask(id: string) {
     try {
-      remove(ref(this.db, "tasks/" + id))
+      remove(ref(this.db, "/tasks/" + id))
     } catch (err) {
       console.error(err)
     }

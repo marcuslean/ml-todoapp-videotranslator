@@ -1,5 +1,7 @@
 <div>
+    <!-- Changes title based on current mode -->
     <h1>{{signupMode ? "Sign Up" : "Log In"}}</h1>
+    <!-- Calls different functions based on current mode -->
     <form (ngSubmit)="signupMode ? signUp() : login()">
         <mat-form-field appearance="fill">
             <mat-label>Email</mat-label>
@@ -9,9 +11,12 @@
             <mat-label>Password</mat-label>
             <input matInput required type="password" name="password" [(ngModel)]="userInput.password">
         </mat-form-field><br>
+        <mat-slide-toggle name="adminToggle" color="warn" [(ngModel)]="admin">Admin</mat-slide-toggle><br><br>
         <button mat-flat-button color="primary" type="submit">{{signupMode ? "Sign Up" : "Log In"}}</button>
     </form>
+    <!-- Area to display error message if exists -->
     <span>{{errorMsg}}</span>
+    <!-- Allows user to change current mode -->
     <div>
         <span>{{signupMode ? "Already a user?" : "Not a user yet?"}}</span><br>
         <button mat-flat-button color="primary" (click)="changeMode()">

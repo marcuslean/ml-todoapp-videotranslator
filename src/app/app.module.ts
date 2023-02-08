@@ -16,6 +16,7 @@ import { MatListModule } from '@angular/material/list';
 import { UserComponent } from './user/user.component';
 import { MatButtonModule } from '@angular/material/button';
 import { AdminComponent } from './admin/admin.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { AdminComponent } from './admin/admin.component';
     FormsModule,
     MatDividerModule,
     MatListModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

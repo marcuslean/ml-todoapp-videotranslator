@@ -8,6 +8,7 @@ import { AuthService } from '../shared/auth.service';
 })
 export class UserComponent {
   signupMode = true; // current mode
+  admin = false;
   errorMsg = "";  // error message to display
   userInput = { email: "", password: "" } // forms' values
 
@@ -27,7 +28,7 @@ export class UserComponent {
   signUp() {
     if (!this.userInput.email || !this.userInput.password) { return }
 
-    this.authService.signUp(this.userInput.email, this.userInput.password)
+    this.authService.signUp(this.userInput.email, this.userInput.password, this.admin)
   }
 
   // function for logging in existing user
