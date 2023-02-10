@@ -1,11 +1,11 @@
 <nav>
     <mat-toolbar color="primary">
         <mat-toolbar-row>
-            <span>To Do App</span>
+            <span routerLink="todo" style="cursor: pointer;">To Do App</span>
             <span class="example-spacer"></span>
-            <button mat-flat-button *ngIf="loggedIn" (click)="logout()">Logout</button>
-            <!-- <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">favorite</mat-icon>
-            <mat-icon class="example-icon" aria-hidden="false" aria-label="Example delete icon">delete</mat-icon> -->
+            <button mat-flat-button *ngIf="loggedIn !== null && loggedIn.admin" routerLink="users"
+                color="primary">Users</button>
+            <button mat-flat-button *ngIf="loggedIn !== null" (click)="logout()">Logout</button>
         </mat-toolbar-row>
     </mat-toolbar>
 </nav>

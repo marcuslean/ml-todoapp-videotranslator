@@ -11,7 +11,9 @@
             <mat-label>Password</mat-label>
             <input matInput required type="password" name="password" [(ngModel)]="userInput.password">
         </mat-form-field><br>
-        <mat-slide-toggle name="adminToggle" color="warn" [(ngModel)]="admin">Admin</mat-slide-toggle><br><br>
+        <div *ngIf="signupMode">
+            <mat-slide-toggle name="adminToggle" color="warn" [(ngModel)]="admin">Admin</mat-slide-toggle><br><br>
+        </div>
         <button mat-flat-button color="primary" type="submit">{{signupMode ? "Sign Up" : "Log In"}}</button>
     </form>
     <!-- Area to display error message if exists -->

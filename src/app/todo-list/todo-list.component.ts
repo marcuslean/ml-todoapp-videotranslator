@@ -5,6 +5,7 @@ import { TodoService } from '../shared/todo.service';
 import { AuthService } from '../shared/auth.service';
 
 import { v4 as uuid } from 'uuid';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-todo-list',
@@ -13,7 +14,7 @@ import { v4 as uuid } from 'uuid';
 })
 export class TodoListComponent {
   newTask: string = "" // user input for new task
-  user: string | null = null
+  user: User | null = null
   todos: Todo[] = [] // list of all todo tasks
 
   constructor(private todoService: TodoService, private translator: TranslatorService, private authService: AuthService) {
@@ -33,7 +34,7 @@ export class TodoListComponent {
   addTask() {
     if (this.user === null || this.newTask === "") { return }
 
-    const newTask = { task: this.newTask, owner: this.user, completed: false, translated: false }
+    const newTask = { task: this.newTask, owner: this.user.id, completed: false, translated: false }
 
     this.todoService.addTask(newTask, uuid())
     this.newTask = ""

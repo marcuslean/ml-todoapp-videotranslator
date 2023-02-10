@@ -6,16 +6,4 @@ import { AuthService } from './shared/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  loggedIn = false;
-
-  constructor(private authService: AuthService) {
-    authService.loggedIn.subscribe(res => {
-      if (res !== null) {
-        this.loggedIn = true
-      } else {
-        this.loggedIn = false
-      }
-    })
-  }
-}
+export class AppComponent { }

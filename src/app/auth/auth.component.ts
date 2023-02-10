@@ -1,20 +1,24 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  selector: 'app-auth',
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.css']
 })
-export class UserComponent {
+export class AuthComponent {
   signupMode = true; // current mode
   admin = false;
   errorMsg = "";  // error message to display
   userInput = { email: "", password: "" } // forms' values
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
     // subscribing to any error message coming from auth service
     authService.errorMsg.subscribe(err => this.errorMsg = err)
+    authService.loggedIn.subscribe(res => {
+      if (res !== null) { router.navigateByUrl('/todo') }
+    })
   }
 
   // function for clearing form and changing mode

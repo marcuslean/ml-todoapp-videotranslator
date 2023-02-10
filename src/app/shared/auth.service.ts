@@ -3,15 +3,16 @@ import { BehaviorSubject } from 'rxjs';
 
 import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, browserSessionPersistence, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, set } from 'firebase/database';
+import { getDatabase, ref, set, get, child } from 'firebase/database';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  auth
-  db
-  private _loggedIn = new BehaviorSubject<string | null>(null)
+  private auth
+  private db
+  private _loggedIn = new BehaviorSubject<User | null>(null)
   loggedIn = this._loggedIn.asObservable()
   private _errorMsg = new BehaviorSubject<string>("")
   errorMsg = this._errorMsg.asObservable()
@@ -34,7 +35,14 @@ export class AuthService {
     setPersistence(this.auth, browserSessionPersistence) // allow users to stay logged in until the session has ended (e.g. tab closed)
     onAuthStateChanged(this.auth, (user) => { // check if there is an existing session with logged in user
       if (user) {
-        this._loggedIn.next(user.email)
+        get(child(ref(this.db), "users/" + user.uid))
+          .then(snapshot => {
+            if (!snapshot.exists()) { return console.error("User does not exist") }
+            this._loggedIn.next(Object.assign({ id: user.uid }, snapshot.val()))
+          })
+          .catch(err => {
+            console.error(err)
+          })
       }
     })
   }
@@ -43,9 +51,10 @@ export class AuthService {
     createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         // signed in
-        const user = userCredential.user
-        set(ref(this.db, "/users/" + user.uid), { email: user.email, admin: admin, history: 0 })
-        this._loggedIn.next(user.email)
+        if (!userCredential.user.email) { return this._errorMsg.next("User was not created") }
+        const newUser = { email: userCredential.user.email, admin: admin, history: 0 }
+        set(ref(this.db, "/users/" + userCredential.user.uid), newUser)
+        this._loggedIn.next(Object.assign({ id: userCredential.user.uid }, newUser))
       })
       .catch((error) => {
         // error occured
@@ -58,7 +67,14 @@ export class AuthService {
       .then((userCredential) => {
         // signed in
         const user = userCredential.user
-        this._loggedIn.next(user.email)
+        get(child(ref(this.db), "users/" + user.uid))
+          .then(snapshot => {
+            if (!snapshot.exists()) { return console.error("User does not exist") }
+            this._loggedIn.next(Object.assign({ id: user.uid }, snapshot.val()))
+          })
+          .catch(err => {
+            console.error(err)
+          })
       })
       .catch((error) => {
         // error occured
