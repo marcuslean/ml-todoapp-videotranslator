@@ -19,6 +19,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { MatTableModule } from '@angular/material/table';
     TodoListComponent,
     AuthComponent,
     AdminComponent,
-    NotFoundComponent
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +42,8 @@ import { MatTableModule } from '@angular/material/table';
     MatListModule,
     MatButtonModule,
     MatSlideToggleModule,
-    MatTableModule
+    MatTableModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

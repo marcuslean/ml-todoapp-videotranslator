@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Todo } from '../models/todo.model';
 
 import { getDatabase, ref, onValue, set, update, remove, child, get, DataSnapshot } from "firebase/database";
 import { initializeApp } from 'firebase/app';
 import { AuthService } from './auth.service';
 import { BehaviorSubject, take } from 'rxjs';
+import { v4 as uuid } from 'uuid';
+
+import { Todo } from '../models/todo.model';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -38,9 +40,9 @@ export class DbService {
   }
 
   // function for adding new tasks
-  addTask(newTask: object, id: string) {
+  addTask(newTask: object) {
     try {
-      set(ref(this.db, "/tasks/" + id), newTask)
+      set(ref(this.db, "/tasks/" + uuid()), newTask)
     } catch (err) {
       console.error(err)
     }

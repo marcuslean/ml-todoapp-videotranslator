@@ -7,7 +7,7 @@ import { AuthService } from '../shared/auth.service';
   providedIn: 'root'
 })
 export class TodoListGuard implements CanActivate {
-  loggedIn = false
+  private loggedIn = false
 
   constructor(private authService: AuthService, private router: Router) {
     authService.loggedIn.subscribe((res) => {
@@ -19,5 +19,4 @@ export class TodoListGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.loggedIn ? true : this.router.parseUrl("/auth");
   }
-
 }

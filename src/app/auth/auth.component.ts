@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent {
-  signupMode = true; // current mode
-  admin = false;
+  signupMode = false; // current mode
+  admin = false; // new user type
   errorMsg = "";  // error message to display
   userInput = { email: "", password: "" } // forms' values
 
