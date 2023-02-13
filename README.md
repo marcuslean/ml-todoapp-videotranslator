@@ -1,21 +1,30 @@
-# Todoapp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.4.
+# Todo App - Marcus Lean
+#### VideoTranslatorAI - Graduate/Junior Developer
+#### Live app deployed [here](https://todo-app-730dc.web.app/)
+##
 
-## Development server
+#### Required: Installing all packages
+Run the command below to install all required packages.
+```bash
+    npm install
+```
+#### Running development server
+Run `npm start` for a dev server. Navigate to http://localhost:4200/.
+#### Building the web app
+Run `npm run build` to build the project. The build will be stored in the `./public` folder.
+#### Running unit tests
+Run `npm test` to execute the unit tests. The default broswer is `Chrome`.
+#### Deploying web app to [Firebase](https://firebase.google.com/)
+Run `firebase login` to login to a google account. This account will be used to host the web app, as well as manage all services related to firebase.
 
-Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `firebase init` to initialise the firebase project for deployment. This includes selecting all relavent firebase services that the project will use.
 
-## Build
+Run `firebase deploy` to deploy local built web app to firebase. Ensure `./public` folder contains the built web app. 
+## Relevant Documentations
 
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `npm test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## TODO
-
-Current todo list is organised by alphabetical order based on id
-   Meaning newest todo might not be at the top/bottom
-Storing key data within the application (e.g. api key is exposed)
+ - [Angular](https://angular.io/docs)
+ - [Angular CLI](https://github.com/angular/angular-cli)
+ - [Angular Material UI](https://material.angular.io/)
+ - [Firebase](https://firebase.google.com/docs/build)
+ - [RxJS](https://rxjs.dev/guide/overview)
