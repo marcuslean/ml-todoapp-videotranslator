@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Todo } from '../models/todo.model';
 import { TranslatorService } from '../shared/translator.service';
-import { TodoService } from '../shared/todo.service';
+import { DbService } from '../shared/db.service';
 import { AuthService } from '../shared/auth.service';
 
 import { v4 as uuid } from 'uuid';
@@ -17,9 +17,9 @@ export class TodoListComponent {
   user: User | null = null
   todos: Todo[] = [] // list of all todo tasks
 
-  constructor(private todoService: TodoService, private translator: TranslatorService, private authService: AuthService) {
+  constructor(private dbService: DbService, private translator: TranslatorService, private authService: AuthService) {
     authService.loggedIn.subscribe(res => this.user = res) // gets current user
-    todoService.todos.subscribe(res => { // gets most updated list of todos
+    dbService.todos.subscribe(res => { // gets most updated list of todos
       this.todos = []
 
       // gets every task and adds respective id elements to it
@@ -36,22 +36,22 @@ export class TodoListComponent {
 
     const newTask = { task: this.newTask, owner: this.user.id, completed: false, translated: false }
 
-    this.todoService.addTask(newTask, uuid())
+    this.dbService.addTask(newTask, uuid())
     this.newTask = ""
   }
 
   // function for completing tasks
   updateTask(item: Todo) {
-    this.todoService.updateTask(item.id, "completed", !item.completed)
+    this.dbService.updateTask(item.id, "completed", !item.completed)
   }
 
   // function for deleting tasks
   deleteTask(item: Todo) {
-    this.todoService.deleteTask(item.id)
+    this.dbService.deleteTask(item.id)
   }
 
   // function for translating each task
   translateTask(item: Todo) {
-    console.log(item)
+    this.translator.translate(item)
   }
 }

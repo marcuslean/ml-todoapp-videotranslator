@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Todo } from '../models/todo.model';
 
-import { getDatabase, ref, onValue, set, update, remove } from "firebase/database";
+import { getDatabase, ref, onValue, set, update, remove, child, get, DataSnapshot } from "firebase/database";
 import { initializeApp } from 'firebase/app';
 import { AuthService } from './auth.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, take } from 'rxjs';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TodoService {
-  db
+export class DbService {
+  private db
   private _todos = new BehaviorSubject<Todo[]>([]) // list of all tasks
   todos = this._todos.asObservable()
+  private _users = new BehaviorSubject<User[]>([]) // list of all users
+  users = this._users.asObservable()
 
   constructor(private authService: AuthService) {
     // initialise firebase app
@@ -46,18 +49,55 @@ export class TodoService {
   // function for updating tasks
   updateTask(id: string, field: string, value: string | boolean) {
     try {
-      update(ref(this.db, "/tasks/" + id + "/"), { [field]: value })
+      update(ref(this.db, "/tasks/" + id), { [field]: value })
     } catch (err) {
       console.error(err)
     }
   }
 
-  // function for deletting tasks
+  // function for deleting tasks
   deleteTask(id: string) {
     try {
       remove(ref(this.db, "/tasks/" + id))
     } catch (err) {
       console.error(err)
     }
+  }
+
+  // function for getting list of all users
+  getAllUsers() {
+    let merged: User[] = []
+
+    get(child(ref(this.db), "users/"))
+      .then(snapshot => {
+        snapshot.forEach(user => {
+          merged.push(Object.assign({ id: user.key }, user.val()))
+        })
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    return merged
+  }
+
+  // function for updating user history
+  updateUser() {
+    // get current logged in user
+    this.authService.loggedIn.pipe(take(1)).subscribe(user => {
+      if (user === null) { return } // check if user exists
+
+      // get current user's history
+      get(child(ref(this.db), "users/" + user.id))
+        .then(snapshot => {
+          return (snapshot.val().history) + 1
+        })
+        .then(val => {
+          // update new history
+          update(ref(this.db, "/users/" + user.id), { history: val })
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }).unsubscribe()
   }
 }

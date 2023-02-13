@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
+import { DbService } from '../shared/db.service';
 
 @Component({
   selector: 'app-nav-bar',
