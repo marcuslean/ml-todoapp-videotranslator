@@ -1,17 +1,21 @@
-<div *ngIf="dataSource.length > 0">
+<!-- waits for data to be retrieved before rendering -->
+<div *ngIf="allUsers.length > 0">
    <br>
    <h1>All Users</h1>
    <sub>Click each user to see their history</sub>
    <mat-accordion>
-      <mat-expansion-panel hideToggle *ngFor="let user of dataSource">
+      <mat-expansion-panel hideToggle *ngFor="let user of allUsers">
          <mat-expansion-panel-header>
+            <!-- User email -->
             <mat-panel-title>
                {{ user.email }}
             </mat-panel-title>
+            <!-- User history -->
             <mat-panel-description>
                {{ user.history ? "This user has translated" : "This user has not translated" }}
             </mat-panel-description>
          </mat-expansion-panel-header>
+         <!-- User history list -->
          <p *ngFor="let task of user.history | keyvalue">{{ task.key }} -> {{ task.value }}</p>
       </mat-expansion-panel>
    </mat-accordion>

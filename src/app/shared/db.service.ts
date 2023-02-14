@@ -13,11 +13,11 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class DbService {
-  private db
-  private _todos = new BehaviorSubject<Todo[]>([]) // list of all tasks
-  todos = this._todos.asObservable()
-  private _users = new BehaviorSubject<User[]>([]) // list of all users
-  users = this._users.asObservable()
+  private db // firebase realtime database reference
+  private _todos = new BehaviorSubject<Todo[]>([]) // list of all tasks as subscribable
+  todos = this._todos.asObservable() // public access to todo as observable
+  private _users = new BehaviorSubject<User[]>([]) // list of all users as subscribable
+  users = this._users.asObservable() // public access to users as observable
 
   constructor(private authService: AuthService) {
     // initialise firebase app
@@ -33,8 +33,8 @@ export class DbService {
     }
     const app = initializeApp(firebaseConfig)
     this.db = getDatabase(app)
-    const tasksRef = ref(this.db, "tasks/")
-    onValue(tasksRef, (snapshot) => { // subscribes to any changes to the /tasks endpoint
+    // subscribes to any changes to the /tasks endpoint
+    onValue(ref(this.db, "tasks/"), (snapshot) => {
       this._todos.next(snapshot.val())
     })
   }
@@ -42,6 +42,7 @@ export class DbService {
   // function for adding new tasks
   addTask(newTask: object) {
     try {
+      // sets data to the /tasks/:id endpoint
       set(ref(this.db, "/tasks/" + uuid()), newTask)
     } catch (err) {
       console.error(err)
@@ -51,6 +52,7 @@ export class DbService {
   // function for updating tasks
   updateTask(id: string, field: string, value: string | boolean) {
     try {
+      // updates data the end /tasks/:id/:field endpoint
       update(ref(this.db, "/tasks/" + id), { [field]: value })
     } catch (err) {
       console.error(err)
@@ -60,6 +62,7 @@ export class DbService {
   // function for deleting tasks
   deleteTask(id: string) {
     try {
+      // deletes data at the /tasks/:id endpoint
       remove(ref(this.db, "/tasks/" + id))
     } catch (err) {
       console.error(err)

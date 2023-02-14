@@ -7,7 +7,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./not-found.component.css']
 })
 export class NotFoundComponent {
-  constructor(private router: Router) {
-    setTimeout(() => { router.navigateByUrl('/todo') }, 3000)
+  constructor(private router: Router) { }
+
+  // on load page redirect user to todo page after 3 seconds
+  ngOnInit() {
+    setTimeout(() => { this.router.navigateByUrl('/todo') }, 3000)
   }
 }

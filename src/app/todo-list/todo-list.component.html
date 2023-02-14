@@ -2,6 +2,7 @@
     <br>
     <!-- input form for user to add new task -->
     <form class="form-field" (ngSubmit)="addTask()">
+        <!-- Task field -->
         <mat-form-field appearance="outline">
             <mat-label>New Task</mat-label>
             <input matInput placeholder="Ex. Apply at VideoTranslator" name="userInput" [(ngModel)]="newTask">
@@ -13,9 +14,9 @@
 <mat-list class="list">
     <h1>Things to do:</h1>
     <mat-divider />
-    <!-- Hint telling user that the list is empty -->
+    <!-- hint telling user that the list is empty -->
     <span *ngIf="todos.length <= 0"><br>Please add a new task</span>
-    <!-- Only displays when something is selected -->
+    <!-- only displays when something is selected -->
     <div *ngIf="todos.length > 0 && checkList.selectedOptions.selected.length > 0">
         <button mat-button color="primary"
             (click)="updateTask(checkList.selectedOptions.selected[0].value)">Complete</button>

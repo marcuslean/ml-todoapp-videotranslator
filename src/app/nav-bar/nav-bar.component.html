@@ -3,8 +3,10 @@
         <mat-toolbar-row>
             <span routerLink="todo" style="cursor: pointer;">To Do App</span>
             <span class="example-spacer"></span>
+            <!-- Navigate to list of all users/history -->
             <button mat-flat-button *ngIf="loggedIn !== null && loggedIn.admin" routerLink="users"
                 color="primary">Users</button>
+            <!-- Logout button -->
             <button mat-flat-button *ngIf="loggedIn !== null" (click)="logout()">Logout</button>
         </mat-toolbar-row>
     </mat-toolbar>

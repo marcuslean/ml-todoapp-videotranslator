@@ -10,12 +10,12 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private auth
-  private db
-  private _loggedIn = new BehaviorSubject<User | null>(null)
-  loggedIn = this._loggedIn.asObservable()
-  private _errorMsg = new BehaviorSubject<string>("")
-  errorMsg = this._errorMsg.asObservable()
+  private auth // firebase auth reference
+  private db // firebase realtime database reference
+  private _loggedIn = new BehaviorSubject<User | null>(null) // subscribable for logged in user data
+  loggedIn = this._loggedIn.asObservable() // public acces to user data observable
+  private _errorMsg = new BehaviorSubject<string>("") // subscribable for error messages
+  errorMsg = this._errorMsg.asObservable() // public acces to error message observable
 
   constructor() {
     // initialise firebase app
@@ -33,12 +33,14 @@ export class AuthService {
     this.auth = getAuth(app)
     this.db = getDatabase(app)
     setPersistence(this.auth, browserSessionPersistence) // allow users to stay logged in until the session has ended (e.g. tab closed)
-    onAuthStateChanged(this.auth, (user) => { // check if there is an existing session with logged in user
+    // check if there is an existing session with logged in user
+    onAuthStateChanged(this.auth, (user) => {
       if (user) {
+        // gets currently logged in user's data from database
         get(child(ref(this.db), "users/" + user.uid))
           .then(snapshot => {
             if (!snapshot.exists()) { return console.error("Error: Cannot auto log in. User does not exist.") }
-            this._loggedIn.next(Object.assign({ id: user.uid }, snapshot.val()))
+            this._loggedIn.next(Object.assign({ id: user.uid }, snapshot.val())) // adds relative id to the user data
           })
           .catch(err => {
             console.error(err)
@@ -52,9 +54,10 @@ export class AuthService {
       .then((userCredential) => {
         // signed in
         if (!userCredential.user.email) { return this._errorMsg.next("Error: User was not created") }
+
         const newUser = { email: userCredential.user.email, admin: admin, history: [] }
-        set(ref(this.db, "/users/" + userCredential.user.uid), newUser)
-        this._loggedIn.next(Object.assign({ id: userCredential.user.uid }, newUser))
+        set(ref(this.db, "/users/" + userCredential.user.uid), newUser) // add new user info to database
+        this._loggedIn.next(Object.assign({ id: userCredential.user.uid }, newUser)) // set user data as subscribable
       })
       .catch((error) => {
         // error occured
@@ -67,10 +70,11 @@ export class AuthService {
       .then((userCredential) => {
         // signed in
         const user = userCredential.user
+        // gets user's data from database
         get(child(ref(this.db), "users/" + user.uid))
           .then(snapshot => {
             if (!snapshot.exists()) { return console.error("Error: User does not exist") }
-            this._loggedIn.next(Object.assign({ id: user.uid }, snapshot.val()))
+            this._loggedIn.next(Object.assign({ id: user.uid }, snapshot.val())) // set existing user data as subscribable
           })
           .catch(err => {
             console.error(err)
@@ -83,6 +87,7 @@ export class AuthService {
   }
 
   logout() {
+    // clear session storage
     sessionStorage.clear()
     this._loggedIn.next(null)
   }

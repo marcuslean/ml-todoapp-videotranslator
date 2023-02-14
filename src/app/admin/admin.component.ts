@@ -8,11 +8,12 @@ import { DbService } from '../shared/db.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent {
-  dataSource: User[] = []
+  allUsers: User[] = []
 
   constructor(private dbService: DbService) { }
 
   ngOnInit() {
-    this.dataSource = this.dbService.getAllUsers() // get updated user data
+    // get all updated user data
+    this.allUsers = this.dbService.getAllUsers()
   }
 }

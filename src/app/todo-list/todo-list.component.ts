@@ -19,9 +19,11 @@ export class TodoListComponent {
   constructor(private dbService: DbService, private translator: TranslatorService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.loggedIn.subscribe(res => this.user = res) // gets current user
-    this.dbService.todos.subscribe(res => { // gets most updated list of todos
-      this.todos = []
+    // gets current user
+    this.authService.loggedIn.subscribe(res => this.user = res)
+    // gets most updated list of todos
+    this.dbService.todos.subscribe(res => {
+      this.todos = [] // empties current list of todos
 
       // gets every task and adds respective id elements to it
       Object.values(res).forEach((task, i) => {
@@ -36,7 +38,6 @@ export class TodoListComponent {
     if (this.user === null || this.newTask === "") { return }
 
     const newTask = { task: this.newTask, owner: this.user.id, completed: false, translated: false }
-
     this.dbService.addTask(newTask)
     this.newTask = ""
   }

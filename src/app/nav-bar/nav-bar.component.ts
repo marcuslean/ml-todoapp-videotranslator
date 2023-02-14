@@ -10,10 +10,12 @@ import { DbService } from '../shared/db.service';
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent {
-  loggedIn: User | null = null
+  loggedIn: User | null = null // User data
 
   constructor(private authService: AuthService, private router: Router) {
+    // subscribes to user data from auth service
     authService.loggedIn.subscribe(res => {
+      // checks if user data exists
       if (res !== null) { this.loggedIn = res }
       else { this.loggedIn = null }
     })

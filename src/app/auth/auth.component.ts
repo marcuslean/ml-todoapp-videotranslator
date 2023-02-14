@@ -14,9 +14,11 @@ export class AuthComponent {
   userInput = { email: "", password: "" } // forms' values
 
   constructor(private authService: AuthService, private router: Router) {
-    // subscribing to any error message coming from auth service
+    // subscribe to any error message coming from auth service
     authService.errorMsg.subscribe(err => this.errorMsg = err)
+    // subscrive to current user data coming from auth service
     authService.loggedIn.subscribe(res => {
+      // if existing user data exist redirect them to todo page
       if (res !== null) { router.navigateByUrl('/todo') }
     })
   }

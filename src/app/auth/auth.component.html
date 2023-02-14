@@ -3,14 +3,17 @@
     <h1>{{signupMode ? "Sign Up" : "Log In"}}</h1>
     <!-- Calls different functions based on current mode -->
     <form (ngSubmit)="signupMode ? signUp() : login()">
+        <!-- Email field -->
         <mat-form-field appearance="fill">
             <mat-label>Email</mat-label>
             <input matInput email required type="email" name="email" [(ngModel)]="userInput.email">
         </mat-form-field><br>
+        <!-- Password field -->
         <mat-form-field appearance="fill">
             <mat-label>Password</mat-label>
             <input matInput required type="password" name="password" [(ngModel)]="userInput.password">
         </mat-form-field><br>
+        <!-- Admin toggle -->
         <div *ngIf="signupMode">
             <mat-slide-toggle name="adminToggle" color="warn" [(ngModel)]="admin">Admin</mat-slide-toggle><br><br>
         </div>
