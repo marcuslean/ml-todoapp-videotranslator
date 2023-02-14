@@ -10,9 +10,9 @@ export class TranslatorService {
   constructor(private dbService: DbService) { }
 
   translate(item: Todo) {
-    let newValue = "translated"
+    let newValue = "Task translated!"
 
-    this.dbService.updateTask(item.id, "task", newValue)
-    this.dbService.updateUser()
+    this.dbService.updateUser(item.task)
+    // this.dbService.updateTask(item.id, "task", newValue)
   }
 }

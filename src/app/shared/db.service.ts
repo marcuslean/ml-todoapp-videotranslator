@@ -83,23 +83,13 @@ export class DbService {
   }
 
   // function for updating user history
-  updateUser() {
+  updateUser(task: string) {
     // get current logged in user
     this.authService.loggedIn.pipe(take(1)).subscribe(user => {
       if (user === null) { return } // check if user exists
 
-      // get current user's history
-      get(child(ref(this.db), "users/" + user.id))
-        .then(snapshot => {
-          return (snapshot.val().history) + 1
-        })
-        .then(val => {
-          // update new history
-          update(ref(this.db, "/users/" + user.id), { history: val })
-        })
-        .catch(err => {
-          console.error(err)
-        })
+      // update new history
+      update(ref(this.db, "/users/" + user.id + "/history"), { [task]: "translated text here" })
     }).unsubscribe()
   }
 }

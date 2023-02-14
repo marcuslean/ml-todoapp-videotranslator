@@ -37,7 +37,7 @@ export class AuthService {
       if (user) {
         get(child(ref(this.db), "users/" + user.uid))
           .then(snapshot => {
-            if (!snapshot.exists()) { return console.error("User does not exist") }
+            if (!snapshot.exists()) { return console.error("Error: Cannot auto log in. User does not exist.") }
             this._loggedIn.next(Object.assign({ id: user.uid }, snapshot.val()))
           })
           .catch(err => {
@@ -51,8 +51,8 @@ export class AuthService {
     createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         // signed in
-        if (!userCredential.user.email) { return this._errorMsg.next("User was not created") }
-        const newUser = { email: userCredential.user.email, admin: admin, history: 0 }
+        if (!userCredential.user.email) { return this._errorMsg.next("Error: User was not created") }
+        const newUser = { email: userCredential.user.email, admin: admin, history: [] }
         set(ref(this.db, "/users/" + userCredential.user.uid), newUser)
         this._loggedIn.next(Object.assign({ id: userCredential.user.uid }, newUser))
       })
@@ -69,7 +69,7 @@ export class AuthService {
         const user = userCredential.user
         get(child(ref(this.db), "users/" + user.uid))
           .then(snapshot => {
-            if (!snapshot.exists()) { return console.error("User does not exist") }
+            if (!snapshot.exists()) { return console.error("Error: User does not exist") }
             this._loggedIn.next(Object.assign({ id: user.uid }, snapshot.val()))
           })
           .catch(err => {

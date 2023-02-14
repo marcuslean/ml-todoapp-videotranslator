@@ -8,7 +8,6 @@ import { DbService } from '../shared/db.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent {
-  displayedColumns: string[] = ['email', 'translated', 'history']
   dataSource: User[] = []
 
   constructor(private dbService: DbService) { }
