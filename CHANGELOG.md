@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.7] - 2023-02-14
+#### Added
+ - More comments
+#### Changed
+ - Login/Signup error handling
+#### Fixed
+ - "Admin" page functionalities
+
 ## [0.0.6] - 2023-02-13
 #### Added
 #### Changed
