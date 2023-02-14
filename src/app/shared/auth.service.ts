@@ -58,6 +58,7 @@ export class AuthService {
         const newUser = { email: userCredential.user.email, admin: admin, history: [] }
         set(ref(this.db, "/users/" + userCredential.user.uid), newUser) // add new user info to database
         this._loggedIn.next(Object.assign({ id: userCredential.user.uid }, newUser)) // set user data as subscribable
+        this._errorMsg.next("")
       })
       .catch((error) => {
         // error occured
@@ -73,16 +74,17 @@ export class AuthService {
         // gets user's data from database
         get(child(ref(this.db), "users/" + user.uid))
           .then(snapshot => {
-            if (!snapshot.exists()) { return console.error("Error: User does not exist") }
+            if (!snapshot.exists()) { return this._errorMsg.next("Error: User does not exist") }
             this._loggedIn.next(Object.assign({ id: user.uid }, snapshot.val())) // set existing user data as subscribable
+            this._errorMsg.next("")
           })
           .catch(err => {
-            console.error(err)
+            this._errorMsg.next(err.message)
           })
       })
       .catch((error) => {
         // error occured
-        this._errorMsg.next(error.message)
+        this._errorMsg.next(this.errorHandling(error.message))
       })
   }
 
@@ -90,5 +92,14 @@ export class AuthService {
     // clear session storage
     sessionStorage.clear()
     this._loggedIn.next(null)
+  }
+
+  // function for handling error messages
+  private errorHandling(err: string): string {
+    if (err.includes("auth/user-not-found")) { return "Email does not exist" }
+    if (err.includes("auth/wrong-password")) { return "Password incorrect" }
+    if (err.includes("auth/invalid-email")) { return "Please enter a valid email" }
+    if (err.includes("auth/invalid-password")) { return "Please enter a valid password" }
+    return err
   }
 }
