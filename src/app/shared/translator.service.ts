@@ -12,7 +12,7 @@ export class TranslatorService {
   translate(item: Todo) {
     let newValue = "Task translated!"
 
-    this.dbService.updateUser(item.task)
-    // this.dbService.updateTask(item.id, "task", newValue)
+    this.dbService.updateUser(item.task, newValue)
+    this.dbService.updateTask(item.id, "task", newValue)
   }
 }

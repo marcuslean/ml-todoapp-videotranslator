@@ -28,3 +28,11 @@ Run `firebase deploy` to deploy local built web app to firebase. Ensure `./publi
  - [Angular Material UI](https://material.angular.io/)
  - [Firebase](https://firebase.google.com/docs/build)
  - [RxJS](https://rxjs.dev/guide/overview)
+
+ ## Future Changes
+
+ - Move Firebase environment configs to a dotenv file to avoid exposing important data
+ - Fully implement translation api
+ - Fully implement automated unit testing
+ - Implement Github Actions for CI/CD
+ 
